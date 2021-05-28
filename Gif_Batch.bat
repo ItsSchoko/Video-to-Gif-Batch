@@ -6,12 +6,12 @@ ECHO       ___^|        ^|             ^|                  ___^|_ _^| ____^|    
 ECHO     \___ \   __^|  __ \    _ \   ^|  /   _ \        ^|      ^|  ^|      _` ^|   __^|  __^|   _ \    __^|  ^|   ^| 
 ECHO           ^| (     ^| ^| ^|  (   ^|    ^<   (   ^|       ^|   ^|  ^|  __^|   (   ^|  (     ^|    (   ^|  ^|     ^|   ^| 
 ECHO     _____/ \___^| _^| ^|_^| \___/  _^|\_\ \___/       \____^|___^|_^|    \__._^| \___^| \__^| \___/  _^|    \__. ^| 
-ECHO                                                                                                 ____/
+ECHO                                                                                             2021____/
 ECHO.
 ECHO.
 
 REM Userinput
-SET /P Input=Skalierung Nein/Ja/Alle 1, 2 oder 3?:
+SET /P Input=Scaling No/Individual/Scale all 1, 2 or 3?:
 IF %Input%==1 GOTO NOSCALE
 IF %Input%==2 GOTO SCALE
 IF %Input%==3 GOTO SCALEALL
@@ -19,11 +19,6 @@ IF %Input%==3 GOTO SCALEALL
 :NOSCALE
 ECHO NO SCALE
 for %%A in (%*) do (
-ECHO .........................
-ECHO.
-ECHO Aktuelle Datei: %%~nxA
-ECHO.
-ECHO .........................
 ffmpeg -i "%%~A" -filter_complex "[0:v] palettegen" -y "%%~dpA%palette.png"
 ffmpeg -i "%%~A" -i palette.png -filter_complex "fps=25[0:v],[0:v][1:v] paletteuse" -y "%%~dpA%%~nA%.gif"
 call :DELETEPLAETTE
@@ -37,7 +32,7 @@ ECHO SCALE INDIVIDUAL
 for %%A in (%*) do (
 ECHO .........................
 ECHO.
-ECHO Aktuelle Datei: %%~nxA
+ECHO Current File: %%~nxA
 ECHO.
 ECHO .........................
 SET /P Scaleinput=New Size: 

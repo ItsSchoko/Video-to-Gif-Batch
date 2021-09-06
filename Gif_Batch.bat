@@ -14,7 +14,7 @@ REM Userinput
 
 SET /P Input=Scaling No/Individual/Scale all 1, 2 or 3?:
 
-IF not defined %Input% ( GOTO NOSCALE )
+IF [%Input%] equ [] ( GOTO NOSCALE )
 IF %Input%==1 GOTO NOSCALE
 IF %Input%==2 GOTO SCALE
 IF %Input%==3 GOTO SCALEALL

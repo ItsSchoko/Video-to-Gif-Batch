@@ -12,7 +12,7 @@ ECHO.
 
 REM Userinput
 
-SET /P Input=Scaling None/Individual/Scale all 1, 2 or 3? (Default is 1):
+SET /P Input=Scaling None/Individual/Scale all 1, 2 or 3?:
 
 IF [%Input%] equ [] ( GOTO NOSCALE )
 IF %Input%==1 GOTO NOSCALE
@@ -21,10 +21,25 @@ IF %Input%==3 GOTO SCALEALL
 
 :NOSCALE
 ECHO NO SCALE
+rem set videowidth=222
+
+
 for %%A in (%*) do (
-ffmpeg -i "%%~A" -filter_complex "[0:v] palettegen" -y "%%~dpA%palette.png"
-ffmpeg -i "%%~A" -i palette.png -filter_complex "fps=25[0:v],[0:v][1:v] paletteuse" -y "%%~dpA%%~nA%.gif"
-call :DELETEPLAETTE
+echo File path "%%~dpA"
+echo File path and name "%%~A"
+echo File path, name and gif file ext. "%%~dpA%%~nA%.gif"
+mkdir "%%~dpA%Giftemp"
+
+setlocal EnableDelayedExpansion
+for /F %%i in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=nw^=1:nk^=1 "%%~A"') do (
+set videowidth=%%i
+)
+
+ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
+gifski --quality 90 --width !videowidth! -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+
+endlocal
+call :DeleteTEMP
 cls
 )
 GOTO MENU
@@ -41,10 +56,13 @@ ECHO .........................
 SET /P Scaleinput=New Size: 
 setlocal EnableDelayedExpansion
 Echo Scaleinput !Scaleinput!
-ffmpeg -i "%%~A" -filter_complex "[0:v] palettegen" -y "%%~dpA%palette.png"
-ffmpeg -i "%%~A" -i palette.png -filter_complex "fps=25,scale=!Scaleinput!:-1:flags=lanczos[0:v],[0:v][1:v] paletteuse" -y "%%~dpA%%~nA%.gif"
+
+mkdir "%%~dpA%Giftemp"
+ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
+gifski --quality 90 --width !Scaleinput! -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+
 endlocal
-call :DELETEPLAETTE
+call :DeleteTEMP
 cls
 )
 GOTO MENU
@@ -54,16 +72,19 @@ ECHO.
 ECHO SCALE ALL
 SET /P Scaleinput=New Size: 
 for %%A in (%*) do (
-ffmpeg -i "%%~A" -filter_complex "[0:v] palettegen" -y "%%~dpA%palette.png"
-ffmpeg -i "%%~A" -i palette.png -filter_complex "fps=25,scale=%Scaleinput%:-1:flags=lanczos[0:v],[0:v][1:v] paletteuse" -y "%%~dpA%%~nA%.gif"
-call :DELETEPLAETTE
+
+mkdir "%%~dpA%Giftemp"
+ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
+gifski --quality 90 --width %Scaleinput% -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+call :DeleteTEMP
 cls
 )
 GOTO MENU
 
 
-:DELETEPLAETTE
-del "%~dp1%palette.png"
+:DeleteTEMP
+rmdir /q /s Giftemp
+
 
 
 

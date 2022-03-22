@@ -20,4 +20,5 @@ To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOp
 ## What the batch files do?
 
 FFMPEG version: Directly takes videos frames and converts them into a Gif
+
 Giski version: Uses FFMPEG to put every frame from a video into a tempfolder as a PNG file. Gifski then combines thoses simgle frames into a Gif.

@@ -12,7 +12,7 @@ ECHO.
 
 REM Userinput
 
-SET /P Input=Scaling None/Individual/Scale all 1, 2 or 3?:
+SET /P Input=Scaling None/Individual/Scale all 1, 2 or 3? (Default is 1):
 
 IF [%Input%] equ [] ( GOTO NOSCALE )
 IF %Input%==1 GOTO NOSCALE

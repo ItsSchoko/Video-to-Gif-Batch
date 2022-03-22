@@ -1,6 +1,9 @@
 # Video-to-Gif-Batch
  
 ### NOTE: You need to have FFMPEG installed, so it can run from command line
+
+### For Gifski version you also need to have Gifski runnable by command line
+To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOptim/gifski)
  
  
  little batch programm that uses FFMPEG to create gifs from video snippets

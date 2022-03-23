@@ -4,6 +4,7 @@
 
 ### For Gifski version you also need to have Gifski executable by command line
 To get FFMPEG [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+
 To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOptim/gifski)
  
  

@@ -36,7 +36,7 @@ set videowidth=%%i
 )
 
 ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --width !videowidth! -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+gifski --quality 90 --width !videowidth! --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
 
 endlocal
 call :DeleteTEMP
@@ -59,7 +59,7 @@ Echo Scaleinput !Scaleinput!
 
 mkdir "%%~dpA%Giftemp"
 ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --width !Scaleinput! -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+gifski --quality 90 --width !Scaleinput! --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
 
 endlocal
 call :DeleteTEMP
@@ -75,7 +75,8 @@ for %%A in (%*) do (
 
 mkdir "%%~dpA%Giftemp"
 ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --width %Scaleinput% -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+gifski --quality 90 --width %Scaleinput% --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+
 call :DeleteTEMP
 cls
 )

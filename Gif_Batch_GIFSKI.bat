@@ -12,17 +12,16 @@ ECHO.
 
 REM Userinput
 
-SET /P Input=Scaling None/Individual/Scale all 1, 2 or 3? (Default is 1):
+SET /P Input=Scaling None/Individual/Scale all/GIF to WEBP convertion 1, 2 3 or 4? (Default is 1):
 
 IF [%Input%] equ [] ( GOTO NOSCALE )
 IF %Input%==1 GOTO NOSCALE
 IF %Input%==2 GOTO SCALE
 IF %Input%==3 GOTO SCALEALL
+IF %Input%==4 GOTO WEBP
 
 :NOSCALE
 ECHO NO SCALE
-rem set videowidth=222
-
 
 for %%A in (%*) do (
 echo File path "%%~dpA"
@@ -72,7 +71,6 @@ ECHO.
 ECHO SCALE ALL
 SET /P Scaleinput=New Size: 
 for %%A in (%*) do (
-
 mkdir "%%~dpA%Giftemp"
 ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
 gifski --quality 90 --fast --width %Scaleinput% --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
@@ -82,12 +80,16 @@ cls
 )
 GOTO MENU
 
+:WEBP
+for %%A in (%*) do (
+echo File path "%%~dpA"
+echo File path and name "%%~A"
+echo File path, name and gif file ext. "%%~dpA%%~nA%.webp"
+
+ffmpeg -i "%%~A" -pix_fmt yuva420p -loop 0 "%%~dpA%%~nA.webp"
+)
+GOTO MENU
 
 :DeleteTEMP
 rmdir /q /s Giftemp
-
-
-
-
-
 

@@ -23,4 +23,4 @@ To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOp
 
 FFMPEG version: Directly takes video frames and converts them into a Gif
 
-Gifski version: Uses FFMPEG to put every frame from a video into a temp folder as PNG files. Gifski then combines thoses single frames into a Gif.
+Gifski version: Uses FFMPEG to put every frame from a video into a temp folder as PNG files. Gifski then combines these single frames into a Gif.

@@ -14,13 +14,13 @@ To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOp
  
  * 1 Drag files onto batch
  
- * 2 Choose whether to just process at is, scale individual, or to scale all with same resolution
+ * 2 Choose whether to just process at is, scale individual, to scale all at same resolution or convert a gif into webp
  
- * 3 Files get created in the same folder they where dragged from
+ * 3 Files (and temp folders/files) get created in the same folder they were dragged from
 
 
 ## What the batch files do?
 
-FFMPEG version: Directly takes videos frames and converts them into a Gif
+FFMPEG version: Directly takes video frames and converts them into a Gif
 
-Giski version: Uses FFMPEG to put every frame from a video into a temp folder as PNG files. Gifski then combines thoses single frames into a Gif.
+Gifski version: Uses FFMPEG to put every frame from a video into a temp folder as PNG files. Gifski then combines thoses single frames into a Gif.

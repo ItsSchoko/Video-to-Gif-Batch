@@ -1,17 +1,17 @@
-ECHO off
+@ECHO off
 :MENU
 ECHO.
 ECHO.
 ECHO       ___^|        ^|             ^|                  ___^|_ _^| ____^|              ^|                       
-ECHO     \___ \   __^|  __ \    _ \   ^|  /   _ \        ^|      ^|  ^|      _` ^|   __^|  __^|   _ \    __^|  ^|   ^| 
+ECHO     \___ \   __^|  __ \    _ \   ^|  /   _ \        ^| __   ^|  ^|      _` ^|   __^|  __^|   _ \    __^|  ^|   ^| 
 ECHO           ^| (     ^| ^| ^|  (   ^|    ^<   (   ^|       ^|   ^|  ^|  __^|   (   ^|  (     ^|    (   ^|  ^|     ^|   ^| 
 ECHO     _____/ \___^| _^| ^|_^| \___/  _^|\_\ \___/       \____^|___^|_^|    \__._^| \___^| \__^| \___/  _^|    \__. ^| 
 ECHO                                                                                             2021____/
 ECHO.
 ECHO.
 
-REM Userinput
 
+REM Userinput
 SET /P Input=Scaling None/Individual/Scale all/GIF to WEBP convertion 1, 2 3 or 4? (Default is 1):
 
 IF [%Input%] equ [] ( GOTO NOSCALE )
@@ -27,18 +27,17 @@ for %%A in (%*) do (
 echo File path "%%~dpA"
 echo File path and name "%%~A"
 echo File path, name and gif file ext. "%%~dpA%%~nA%.gif"
-mkdir "%%~dpA%Giftemp"
 
 setlocal EnableDelayedExpansion
+
+REM gets width of the input video
 for /F %%i in ('ffprobe -v error -select_streams v:0 -show_entries stream^=width -of default^=nw^=1:nk^=1 "%%~A"') do (
 set videowidth=%%i
 )
 
-ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --fast --width !videowidth! --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+ffmpeg -i "%%~A" -f yuv4mpegpipe - | gifski --quality 95 --width !videowidth! --fps 25 -o "%%~dpA%%~nA.gif" -
 
 endlocal
-call :DeleteTEMP
 cls
 )
 GOTO MENU
@@ -56,12 +55,9 @@ SET /P Scaleinput=New Size:
 setlocal EnableDelayedExpansion
 Echo Scaleinput !Scaleinput!
 
-mkdir "%%~dpA%Giftemp"
-ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --fast --width !Scaleinput! --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
+ffmpeg -i "%%~A" -f yuv4mpegpipe - | gifski --quality 95 --width !Scaleinput! --fps 25 -o "%%~dpA%%~nA.gif" -
 
 endlocal
-call :DeleteTEMP
 cls
 )
 GOTO MENU
@@ -71,13 +67,10 @@ ECHO.
 ECHO SCALE ALL
 SET /P Scaleinput=New Size: 
 for %%A in (%*) do (
-mkdir "%%~dpA%Giftemp"
-ffmpeg -i "%%~A" -filter_complex "fps=25, colormatrix=bt709:bt601, format=rgb24" "%%~dpAGiftemp\frame%%04d.png"
-gifski --quality 90 --fast --width %Scaleinput% --fps 25 -o "%%~dpA%%~nA.gif" "%%~dpAGiftemp\frame"*.png
-
-call :DeleteTEMP
+ffmpeg -i "%%~A" -f yuv4mpegpipe - | gifski --quality 95 --width %Scaleinput% --fps 25 -o "%%~dpA%%~nA.gif" -
 cls
 )
+
 GOTO MENU
 
 :WEBP
@@ -86,10 +79,9 @@ echo File path "%%~dpA"
 echo File path and name "%%~A"
 echo File path, name and gif file ext. "%%~dpA%%~nA%.webp"
 
-ffmpeg -i "%%~A" -pix_fmt yuva420p -loop 0 "%%~dpA%%~nA.webp"
+ffmpeg -i "%%~A" -pix_fmt yuva420p -y -loop 0 "%%~dpA%%~nA.webp"
+cls
 )
 GOTO MENU
 
-:DeleteTEMP
-rmdir /q /s Giftemp
 

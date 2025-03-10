@@ -21,7 +21,7 @@ To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOp
 
 ## What the batch files do?
 
-FFMPEG version: Directly takes video frames and converts them into a Gif
+FFMPEG version: Uses FFMPEG and converts input video frames into a Gif
 
-Gifski version: Takes each single frame and directly feeds it from FFMPEG into Gifski to create a GIF. This version **needs Gifski 1.32.0+**
+Gifski version: Takes each single frame and directly feeds it from FFMPEG into Gifski to create a GIF. **This version needs Gifski 1.32.0+**
 

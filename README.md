@@ -10,17 +10,18 @@ To get Gifski: [https://github.com/ImageOptim/gifski](https://github.com/ImageOp
  
  ## How to use?
  
- little batch programm that uses FFMPEG to create gifs from video snippets
+ little batch program that uses FFMPEG (and Gifski) to create gifs from video snippets
  
  * 1 Drag files onto batch
  
  * 2 Choose whether to just process at is, scale individual, to scale all at same resolution or convert a gif into webp
  
- * 3 Files (and temp folders/files) get created in the same folder they were dragged from
+ * 3 Files get created in the same folder they were dragged from
 
 
 ## What the batch files do?
 
 FFMPEG version: Directly takes video frames and converts them into a Gif
 
-Gifski version: Uses FFMPEG to put every frame from a video into a temp folder as PNG files. Gifski then combines these single frames into a Gif.
+Gifski version: Takes each single frame and directly feeds it from FFMPEG into Gifski to create a GIF. This version **needs Gifski 1.32.0+**
+
